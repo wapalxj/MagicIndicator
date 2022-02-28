@@ -17,13 +17,16 @@ import java.util.List;
 public class ExamplePagerAdapter extends PagerAdapter {
     private List<String> mDataList;
 
+    private int realItemCount = 0;
     public ExamplePagerAdapter(List<String> dataList) {
         mDataList = dataList;
+        realItemCount=mDataList.size();
     }
 
     @Override
     public int getCount() {
-        return mDataList == null ? 0 : mDataList.size();
+//        return mDataList == null ? 0 : mDataList.size();
+        return mDataList == null ? 0 : Integer.MAX_VALUE;
     }
 
     @Override
@@ -34,7 +37,8 @@ public class ExamplePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         TextView textView = new TextView(container.getContext());
-        textView.setText(mDataList.get(position));
+//        textView.setText(mDataList.get(position));
+        textView.setText(mDataList.get(position % realItemCount));
         textView.setGravity(Gravity.CENTER);
         textView.setTextColor(Color.BLACK);
         textView.setTextSize(24);
@@ -60,6 +64,6 @@ public class ExamplePagerAdapter extends PagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mDataList.get(position);
+        return mDataList.get(position % realItemCount);
     }
 }

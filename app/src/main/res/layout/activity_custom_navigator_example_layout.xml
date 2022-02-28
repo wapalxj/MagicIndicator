@@ -31,4 +31,17 @@
         android:layout_above="@id/magic_indicator2"
         android:layout_centerHorizontal="true" />
 
+    <net.lucode.hackware.magicindicator.MagicIndicator
+        android:id="@+id/magic_indicator4"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/common_navigator_height"
+        android:layout_above="@id/magic_indicator3"
+        android:layout_centerHorizontal="true" />
+    <net.lucode.hackware.magicindicator.MagicIndicator
+        android:id="@+id/magic_indicator5"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/common_navigator_height"
+        android:layout_above="@id/magic_indicator4"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

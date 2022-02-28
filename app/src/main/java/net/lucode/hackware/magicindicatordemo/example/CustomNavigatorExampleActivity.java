@@ -10,6 +10,8 @@ import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
 import net.lucode.hackware.magicindicatordemo.R;
+import net.lucode.hackware.magicindicatordemo.ext.navigator.LineNavigator;
+import net.lucode.hackware.magicindicatordemo.ext.navigator.RoundRectNavigator;
 import net.lucode.hackware.magicindicatordemo.ext.navigator.ScaleCircleNavigator;
 
 import java.util.Arrays;
@@ -33,12 +35,14 @@ public class CustomNavigatorExampleActivity extends AppCompatActivity {
         initMagicIndicator1();
         initMagicIndicator2();
         initMagicIndicator3();
+        initMagicIndicator4();
+        initMagicIndicator5();
     }
 
     private void initMagicIndicator1() {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator1);
         CircleNavigator circleNavigator = new CircleNavigator(this);
-        circleNavigator.setCircleCount(CHANNELS.length);
+        circleNavigator.setCircleCount(CHANNELS.length*2);
         circleNavigator.setCircleColor(Color.RED);
         circleNavigator.setCircleClickListener(new CircleNavigator.OnCircleClickListener() {
             @Override
@@ -54,7 +58,7 @@ public class CustomNavigatorExampleActivity extends AppCompatActivity {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator2);
         CircleNavigator circleNavigator = new CircleNavigator(this);
         circleNavigator.setFollowTouch(false);
-        circleNavigator.setCircleCount(CHANNELS.length);
+        circleNavigator.setCircleCount(CHANNELS.length*2);
         circleNavigator.setCircleColor(Color.RED);
         circleNavigator.setCircleClickListener(new CircleNavigator.OnCircleClickListener() {
             @Override
@@ -80,5 +84,23 @@ public class CustomNavigatorExampleActivity extends AppCompatActivity {
         });
         magicIndicator.setNavigator(scaleCircleNavigator);
         ViewPagerHelper.bind(magicIndicator, mViewPager);
+    }
+
+    private void initMagicIndicator4() {
+        MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator4);
+        LineNavigator navigator = new LineNavigator(this);
+        navigator.setTotalCount(CHANNELS.length*2);
+
+        magicIndicator.setNavigator(navigator);
+        ViewPagerHelper.bind(magicIndicator, mViewPager);
+    }
+
+    private void initMagicIndicator5() {
+        MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator5);
+        RoundRectNavigator navigator = new RoundRectNavigator(this);
+        navigator.setTotalCount(CHANNELS.length);
+        magicIndicator.setNavigator(navigator);
+        ViewPagerHelper.bind(magicIndicator, mViewPager);
+//        mViewPager.setCurrentItem(Integer.MAX_VALUE / 2 - (Integer.MAX_VALUE / 2) % CHANNELS.length);
     }
 }
