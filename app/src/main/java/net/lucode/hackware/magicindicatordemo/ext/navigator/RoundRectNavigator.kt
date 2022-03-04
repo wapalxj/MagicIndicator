@@ -38,9 +38,11 @@ class RoundRectNavigator(context: Context) : View(context), IPagerNavigator {
 
 
     var maxCount: Int = 0
+    var realCount: Int = 0
     var totalCount: Int = 0
     set(value) {
-        field = value
+        field = 3
+        realCount=value
         maxCount= Int.MAX_VALUE
     }
     init {
@@ -141,28 +143,65 @@ class RoundRectNavigator(context: Context) : View(context), IPagerNavigator {
                     this.mLineColors.add(mUnSelectedColor)
                 }
                 i == mCurrentIndex -> {
+                    //用来计算ratio
                     left = i * (mLineWidth + mLineSpacing)
                     right = left + mLineWidth + (selectedWidth - mLineWidth) * (1 - lastPositionOffset)
-
-                    /////
                     val ratio = (right - left - mLineWidth) / (selectedWidth - mLineWidth)
                     val color=getCurrentColor(ratio,mUnSelectedColor,mSelectedColor)
+
+
+                    if (mCurrentIndex==1) {
+                        left = i * (mLineWidth + mLineSpacing)
+                        right = left + mLineWidth
+                    }else{
+                        left = i * (mLineWidth + mLineSpacing)
+                        right = left + mLineWidth + (selectedWidth - mLineWidth) * (1 - lastPositionOffset)
+                    }
+
+                    /////
+//                    val ratio = (right - left - mLineWidth) / (selectedWidth - mLineWidth)
+//                    val color=getCurrentColor(ratio,mUnSelectedColor,mSelectedColor)
                     this.mLineColors.add(color)
                 }
 
                 i == mCurrentIndex + 1 -> {
+                    //用来计算ratio
                     left = (i - 1) * (mLineSpacing + mLineWidth) + mLineWidth + (selectedWidth - mLineWidth) * (1 - lastPositionOffset) + mLineSpacing
                     right = i * (mLineSpacing + mLineWidth) + selectedWidth
 
-                    /////
                     val ratio = (right - left - mLineWidth) / (selectedWidth - mLineWidth)
                     val color=getCurrentColor(ratio,mUnSelectedColor,mSelectedColor)
+
+                     if (mCurrentIndex == 0) {
+                         left = (i - 1) * (mLineSpacing + mLineWidth) + mLineWidth + (selectedWidth - mLineWidth) * (1 - lastPositionOffset) + mLineSpacing
+                         right = left + mLineWidth
+                     } else if (mCurrentIndex == 1) {
+                         left = i * (mLineWidth + mLineSpacing)
+                         right = left + mLineWidth+ (selectedWidth - mLineWidth) * lastPositionOffset
+                     } else {
+                         left = (i - 1) * (mLineSpacing + mLineWidth) + mLineWidth + (selectedWidth - mLineWidth) * (1 - lastPositionOffset) + mLineSpacing
+                         right = i * (mLineSpacing + mLineWidth) + selectedWidth
+                     }
+
+                    /////
+//                    val ratio = (right - left - mLineWidth) / (selectedWidth - mLineWidth)
+//                    val color=getCurrentColor(ratio,mUnSelectedColor,mSelectedColor)
                     this.mLineColors.add(color)
                 }
                 else -> {
-                    left = (i - 1) * (mLineWidth + mLineSpacing) + (selectedWidth + mLineSpacing)
-                    right = (i - 1) * (mLineWidth + mLineSpacing) + (selectedWidth + mLineSpacing) + mLineWidth
-
+                    //3个不走这里了
+//                    left = (i - 1) * (mLineWidth + mLineSpacing) + (selectedWidth + mLineSpacing)
+//                    right = (i - 1) * (mLineWidth + mLineSpacing) + (selectedWidth + mLineSpacing) + mLineWidth
+                    if (mCurrentIndex == 0) {
+                        left = (i - 1) * (mLineSpacing + mLineWidth) + mLineWidth + (selectedWidth - mLineWidth) * (1 - lastPositionOffset) + mLineSpacing
+                        right = left + mLineWidth
+                    } else if (mCurrentIndex == 1) {
+                        left = i * (mLineWidth + mLineSpacing)
+                        right = (i - 1) * (mLineWidth + mLineSpacing) + (selectedWidth + mLineSpacing) + mLineWidth
+                    } else {
+                        right = (i - 1) * (mLineWidth + mLineSpacing) + (selectedWidth + mLineSpacing) + mLineWidth
+                        left = (i - 1) * (mLineWidth + mLineSpacing) + (selectedWidth + mLineSpacing)
+                    }
                     /////
                     this.mLineColors.add(mUnSelectedColor)
                 }
@@ -181,17 +220,64 @@ class RoundRectNavigator(context: Context) : View(context), IPagerNavigator {
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        Log.e("onPageScrolled", "position===${position} ====onPageScrolled===$mCurrentIndex=====positionOffset===${positionOffset}")
         this.mCurrentIndex = position % totalCount
-        Log.e("onPageScrolled","onPageScrolled===$mCurrentIndex")
+//
+        /**
+         * 只显示3个点
+         * 1.选中最左边，最左边的点变长加黑---默认
+         * 2.选中最右边，最右边的点变长加黑
+         * 3.选中中间，只加黑不变长
+         */
+//        if (position >= 1 && position < realCount - 2) {
+//            //3.选中中间，只加黑不变长
+//            return
+//        } else if (position == realCount - 2) {
+//            //倒数第2个，置为中间的点
+//            this.mCurrentIndex = 1
+//        } else if (position > realCount - 2) {
+//            //2.选中最右边，最右边的点变长加黑
+//            this.mCurrentIndex = totalCount - 1
+//        }
+
+        if (!handle(position)) {
+            return
+        }
         lastPositionOffset = this.mStartInterpolator.getInterpolation(positionOffset)
         this.invalidate()
     }
 
+    private fun handle(position: Int):Boolean {
+        /**
+         * 只显示3个点
+         * 1.选中最左边，最左边的点变长加黑---默认
+         * 2.选中最右边，最右边的点变长加黑
+         * 3.选中中间，只加黑不变长
+         */
+        if (position >= 1 && position < realCount - 2) {
+            //3.选中中间，只加黑不变长
+            this.mCurrentIndex = 0
+            lastPositionOffset=1f
+            return false
+        } else if (position == realCount - 2) {
+            //倒数第2个，置为中间的点
+            this.mCurrentIndex = 1
+        } else if (position > realCount - 2) {
+            //2.选中最右边，最右边的点变长加黑
+            this.mCurrentIndex = totalCount - 1
+        }
+        return true
+    }
+
 
     override fun onPageSelected(position: Int) {
+        Log.e("onPageSelected", "position===${position}")
         if (!this.mFollowTouch) {
             this.mIndicatorX = this.mLinePoints[this.mCurrentIndex].left
             this.mCurrentIndex = position % totalCount
+            if (!handle(position)) {
+                return
+            }
             this.invalidate()
         }
 

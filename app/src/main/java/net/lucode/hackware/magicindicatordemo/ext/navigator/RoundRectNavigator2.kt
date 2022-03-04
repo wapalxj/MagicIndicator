@@ -14,7 +14,7 @@ import net.lucode.hackware.magicindicatordemo.BuildConfig
 import java.util.*
 
 /**
- * desc:   指示器
+ * desc:   指示器 原始版本
  *
  * 配合 [net.lucode.hackware.magicindicator.MagicIndicator] 使用
  */

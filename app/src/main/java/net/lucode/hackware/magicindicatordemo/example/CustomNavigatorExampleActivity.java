@@ -43,7 +43,7 @@ public class CustomNavigatorExampleActivity extends AppCompatActivity {
     private void initMagicIndicator1() {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator1);
         CircleNavigator circleNavigator = new CircleNavigator(this);
-        circleNavigator.setCircleCount(CHANNELS.length*2);
+        circleNavigator.setCircleCount(CHANNELS.length);
         circleNavigator.setCircleColor(Color.RED);
         circleNavigator.setCircleClickListener(new CircleNavigator.OnCircleClickListener() {
             @Override
@@ -59,7 +59,7 @@ public class CustomNavigatorExampleActivity extends AppCompatActivity {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator2);
         CircleNavigator circleNavigator = new CircleNavigator(this);
         circleNavigator.setFollowTouch(false);
-        circleNavigator.setCircleCount(CHANNELS.length*2);
+        circleNavigator.setCircleCount(CHANNELS.length);
         circleNavigator.setCircleColor(Color.RED);
         circleNavigator.setCircleClickListener(new CircleNavigator.OnCircleClickListener() {
             @Override
@@ -90,18 +90,24 @@ public class CustomNavigatorExampleActivity extends AppCompatActivity {
     private void initMagicIndicator4() {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator4);
         LineNavigator navigator = new LineNavigator(this);
-        navigator.setTotalCount(CHANNELS.length*2);
+        navigator.setTotalCount(CHANNELS.length);
 
         magicIndicator.setNavigator(navigator);
         ViewPagerHelper.bind(magicIndicator, mViewPager);
     }
-
+    RoundRectNavigator navigator;
     private void initMagicIndicator5() {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator5);
-        RoundRectNavigator navigator = new RoundRectNavigator(this);
+         navigator = new RoundRectNavigator(this);
         navigator.setTotalCount(CHANNELS.length);
         magicIndicator.setNavigator(navigator);
         ViewPagerHelper.bind(magicIndicator, mViewPager);
 //        mViewPager.setCurrentItem(Integer.MAX_VALUE / 2 - (Integer.MAX_VALUE / 2) % CHANNELS.length);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigator.notifyDataSetChanged();
     }
 }
