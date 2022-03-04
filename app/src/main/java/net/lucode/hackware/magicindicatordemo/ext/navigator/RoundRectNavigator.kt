@@ -275,9 +275,25 @@ class RoundRectNavigator(context: Context) : View(context), IPagerNavigator {
         if (!this.mFollowTouch) {
             this.mIndicatorX = this.mLinePoints[this.mCurrentIndex].left
             this.mCurrentIndex = position % totalCount
-            if (!handle(position)) {
+
+            /**
+             * 只显示3个点
+             * 1.选中最左边，最左边的点变长加黑---默认
+             * 2.选中最右边，最右边的点变长加黑
+             * 3.选中中间，只加黑不变长
+             */
+            if (position >= 2 && position < realCount - 2) {
+                //3.选中中间，只加黑不变长
+                this.mCurrentIndex = 1
                 return
+            } else if (position == realCount - 2) {
+                //倒数第2个，置为中间的点
+                this.mCurrentIndex = 1
+            } else if (position > realCount - 2) {
+                //2.选中最右边，最右边的点变长加黑
+                this.mCurrentIndex = totalCount - 1
             }
+
             this.invalidate()
         }
 
