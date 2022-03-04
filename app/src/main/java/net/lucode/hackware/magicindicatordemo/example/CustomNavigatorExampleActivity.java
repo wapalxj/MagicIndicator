@@ -2,6 +2,7 @@ package net.lucode.hackware.magicindicatordemo.example;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
